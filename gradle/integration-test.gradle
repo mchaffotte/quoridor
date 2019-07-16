@@ -1,0 +1,31 @@
+apply plugin: 'idea'
+
+sourceSets {
+    integTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    integTestImplementation.extendsFrom implementation
+    integTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs the integration tests.'
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+
+    testClassesDirs = sourceSets.integTest.output.classesDirs
+    classpath = sourceSets.integTest.runtimeClasspath
+    mustRunAfter test
+}
+
+check.dependsOn integrationTest
+
+idea {
+    module {
+        testSourceDirs += project.sourceSets.integTest.java.srcDirs
+        testResourceDirs += project.sourceSets.integTest.resources.srcDirs
+    }
+}

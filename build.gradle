@@ -1,0 +1,55 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply from: "$rootDir/gradle/integration-test.gradle"
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.3.2'
+    assertjVersion = '3.12.2'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'com.h2database:h2:1.4.199'
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+    testImplementation 'org.mockito:mockito-junit-jupiter:2.28.2'
+
+    integTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+    integTestImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    integTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    integTestImplementation "org.assertj:assertj-core:$assertjVersion"
+}
+
+test {
+    useJUnitPlatform()
+    beforeTest { descriptor ->
+        logger.lifecycle("Running " + descriptor)
+    }
+}
+test.outputs.upToDateWhen { false }
+
+integrationTest {
+    useJUnitPlatform()
+    beforeTest { descriptor ->
+        logger.lifecycle("Running " + descriptor)
+    }
+}
+integrationTest.outputs.upToDateWhen { false }
+
+wrapper {
+    gradleVersion = '5.4.1'
+}
