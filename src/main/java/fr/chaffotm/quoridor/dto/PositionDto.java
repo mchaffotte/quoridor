@@ -1,10 +1,15 @@
 package fr.chaffotm.quoridor.dto;
 
+import java.util.Objects;
+
 public class PositionDto {
 
-    private final int column;
+    private int column;
 
-    private final int row;
+    private int row;
+
+    protected PositionDto() {
+    }
 
     public PositionDto(int column, int row) {
         this.column = column;
@@ -17,6 +22,28 @@ public class PositionDto {
 
     public int getRow() {
         return row;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PositionDto that = (PositionDto) o;
+        return column == that.column &&
+                row == that.row;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(column, row);
+    }
+
+    @Override
+    public String toString() {
+        return "PositionDto{" +
+                "column=" + column +
+                ", row=" + row +
+                '}';
     }
 
 }

@@ -3,7 +3,7 @@ package fr.chaffotm.quoridor.mapper;
 import fr.chaffotm.quoridor.dto.PositionDto;
 import fr.chaffotm.quoridor.model.Position;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PositionMapper {
@@ -12,10 +12,14 @@ public class PositionMapper {
         return new PositionDto(position.getColumn(), position.getRow());
     }
 
-    public static List<PositionDto> map(final List<Position> positions) {
+    public static Set<PositionDto> map(final Set<Position> positions) {
         return positions.stream()
                 .map(PositionMapper::map)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
+    }
+
+    public static Position unmap(PositionDto position) {
+        return new Position(position.getColumn(), position.getRow());
     }
 
 }

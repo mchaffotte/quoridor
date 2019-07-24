@@ -33,4 +33,10 @@ public class Board {
         return size;
     }
 
+    public boolean isInside(final Position position) {
+        int column = position.getColumn();
+        int row = position.getRow();
+        return row >= 0 && row < size && column >= 0 && column < size;
+    }
+
 }

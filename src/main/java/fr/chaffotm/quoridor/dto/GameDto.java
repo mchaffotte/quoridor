@@ -1,16 +1,17 @@
 package fr.chaffotm.quoridor.dto;
 
-import javax.persistence.Entity;
 import java.util.List;
 
-@Entity
 public class GameDto {
 
-    private final Long id;
+    private Long id;
 
-    private final BoardDto board;
+    private BoardDto board;
 
-    private final List<PositionDto> pawns;
+    private List<PositionDto> pawns;
+
+    protected GameDto() {
+    }
 
     public GameDto(Long id, BoardDto board, List<PositionDto> pawns) {
         this.id = id;

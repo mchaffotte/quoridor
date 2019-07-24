@@ -2,6 +2,8 @@ package fr.chaffotm.quoridor.controller;
 
 import fr.chaffotm.quoridor.dto.GameDto;
 import fr.chaffotm.quoridor.dto.GameConfigurationDto;
+import fr.chaffotm.quoridor.dto.PositionDto;
+import fr.chaffotm.quoridor.dto.MovementPossibilitiesDto;
 import fr.chaffotm.quoridor.service.GameService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,4 +35,15 @@ public class GameRestController {
     public GameDto get(@PathVariable("id") final long id) {
         return gameService.get(id);
     }
+
+    @PutMapping("{id}/move-pawn")
+    public GameDto movePawn(@PathVariable("id") final long id, @RequestBody @Valid PositionDto to) {
+        return gameService.movePawn(id, to);
+    }
+
+    @GetMapping("{id}/move-pawn/possibilities")
+    public MovementPossibilitiesDto getPawnMovementPossibilities(@PathVariable("id") final long id) {
+        return gameService.getMovementPossibilities(id);
+    }
+
 }

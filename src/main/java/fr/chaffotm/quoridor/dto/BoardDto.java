@@ -3,7 +3,6 @@ package fr.chaffotm.quoridor.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class BoardDto {
 
     private int size;
