@@ -3,7 +3,6 @@ package fr.chaffotm.quoridor.model;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -21,6 +20,8 @@ public class Game {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Pawn> pawns;
 
+    private boolean over;
+
     public Game() {
         //Used by JPA
     }
@@ -32,6 +33,7 @@ public class Game {
                 new Pawn(0, lineCenter),
                 new Pawn(boardSize - 1, lineCenter)
         );
+        over = false;
     }
 
     public Long getId() {
@@ -58,15 +60,27 @@ public class Game {
         this.pawns = pawns;
     }
 
+    public boolean isOver() {
+        return over;
+    }
+
+    public void setOver(boolean over) {
+        this.over = over;
+    }
+
     public void movePawn(final Position to) {
+        if (over) {
+            throw new IllegalStateException("The game is over");
+        }
         if (!board.isInside(to)) {
             throw new IllegalStateException("The new position is not inside the board");
         }
         final Set<Position> moves = getMovementPossibilities();
         if (!containsPosition(moves, to)) {
-            throw new IllegalStateException("It is not possible to move to %v\", destination");
+            throw new IllegalStateException("It is not possible to move to (" + to.getColumn() + ", " + to.getRow() + ")");
         }
         pawns.get(0).setPosition(to);
+        over = pawns.get(0).getPosition().getColumn() == board.getSize() - 1;
     }
 
     private boolean containsPosition(Set<Position> moves, Position position) {
@@ -79,6 +93,10 @@ public class Game {
     }
 
     public Set<Position> getMovementPossibilities() {
+        final Set<Position> positions = new HashSet<>();
+        if (over) {
+            return positions;
+        }
         final Position from = pawns.get(0).getPosition();
         final List<Move> moves = List.of(
                 new Move(from, 0, -1),
@@ -86,7 +104,6 @@ public class Game {
                 new Move(from, 0, 1),
                 new Move(from, -1, 0)
         );
-        final Set<Position> positions = new HashSet<>();
         for (Move move : moves) {
             if (getPositionState(move.getTo()) == PositionState.FREE) {
                 positions.add(move.getTo());

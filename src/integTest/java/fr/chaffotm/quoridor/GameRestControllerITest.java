@@ -96,10 +96,9 @@ public class GameRestControllerITest {
         assertThat(response.getBody()).isNull();
     }
 
-
     @Test
-    @DisplayName("Create game should create the game with default configuration")
-    public void createGameShouldCreateTheGameWithDefa1ultConfiguration() {
+    @DisplayName("Move pawn should move the pawn and change the movement possibilities")
+    public void movePawnShouldMoveThePawnAndChangeTheMovementPossibilities() {
         final ResponseEntity<Void> response = restTemplate.postForEntity("/games", null, Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         final URI location = response.getHeaders().getLocation();
@@ -123,7 +122,6 @@ public class GameRestControllerITest {
         assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         final GameDto newGame = exchange.getBody();
         assertThat(newGame.getPawns().get(0)).isEqualTo( new PositionDto(1, 4));
-
 
         possibleResponse = restTemplate.getForEntity("/games/" + game.getId() + "/move-pawn/possibilities", MovementPossibilitiesDto.class);
         assertThat(possibleResponse.getStatusCode()).isEqualTo(HttpStatus.OK);

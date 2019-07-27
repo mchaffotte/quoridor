@@ -1,6 +1,7 @@
 package fr.chaffotm.quoridor.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Position {
@@ -33,4 +34,25 @@ public class Position {
         return row;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return column == position.column &&
+                row == position.row;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(column, row);
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "column=" + column +
+                ", row=" + row +
+                '}';
+    }
 }
